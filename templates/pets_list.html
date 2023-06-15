@@ -9,15 +9,27 @@
     {%for pet in pets%} 
     <div class="col-4">
         <img class="img-thumbnail" src="{{pet.pet_photo()}}">
-        <p class="pet_name">{{pet.name}}</p>
+        <p class="pet_name">Name: {{pet.name}} 
+            <br> 
+            Species: {{pet.species}} 
+            <br> 
+            Age: {{pet.age}} 
+            <br> 
+            Notes: {{pet.notes}} 
+            <br>
+            {%if pet.available%} 
+            <b>Available for adoption</b> 
+            {%else%}
+            <b>Not available for adoption</b>
+            {%endif%}
+        </p>
         <a href="{{url_for('edit_pet', pet_id=pet.id)}}">Edit {{pet.name}}</a>
-        {%if pet.available%} <b>Available</b> {%endif%}
     </div>
     {%else%} 
     <div class="col-10">No pets are available currently.</div>
     {%endfor%}
 </div>
-
+<br>
 <a class="btn btn-info" href="{{url_for('add_pet')}}">Add pet</a>
 
 {%endblock%}

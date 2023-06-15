@@ -8,11 +8,13 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = "so-secret"
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///adopt"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.debug = True
+# app.debug = True
 toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
 db.create_all()
+
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 
 ##########################################################################
@@ -23,7 +25,7 @@ def home():
     """Home page. Lists all pets"""
     pets = Pet.query.all()
     
-    return render_template('pets_list.html', petss=pets)
+    return render_template('pets_list.html', pets=pets)
 
 
 @app.route('/add', methods=["GET", "POST"])
@@ -66,3 +68,12 @@ def edit_pet(pet_id):
         return render_template("edit_pet_form.html", form=form, pet=pet)
     
 
+@app.route('/<int:pet_id>/delete', methods=['POST'])
+def delete_pet(pet_id):
+    pet = Pet.query.get(pet_id)
+    db.session.delete(pet)
+    db.session.commit()
+    
+    flash(f'{pet.name} has been removed.')
+    
+    return redirect (url_for('home'))
