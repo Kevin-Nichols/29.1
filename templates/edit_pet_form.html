@@ -1,0 +1,16 @@
+{%extends 'base.html'%}
+
+{%block content%}
+
+<h1>Edit {{pet.name}}</h1>
+
+{%if pet.photo_url%} 
+<img class="img-fluid" src="{{pet.photo_url}}">
+{%endif%} 
+
+<form method="POST">
+    {% include "base_form.html" %}
+    <button class="btn btn-success" type="submit">Update Pet</button>
+</form>
+
+{%endblock%} 
